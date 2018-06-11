@@ -299,32 +299,37 @@ class searcher:
             return dict([(u, float(minscore) / max(vsmall, l)) for (u, l) in scores.items()])
         else:
             maxscore = max(scores.values())
-            if maxscore == 0: maxscore = vsmall
+            if maxscore == 0:
+                maxscore = vsmall
             return dict([(u, float(c) / maxscore) for (u, c) in scores.items()])
 
     def frequencyscore(self, rows):
         counts = dict([(row[0], 0) for row in rows])
-        for row in rows: counts[row[0]] += 1
+        for row in rows:
+            counts[row[0]] += 1
         return self.normalizescores(counts)
 
     def locationscore(self, rows):
         locations = dict([(row[0], 1000000) for row in rows])
         for row in rows:
             loc = sum(row[1:])
-            if loc < locations[row[0]]: locations[row[0]] = loc
+            if loc < locations[row[0]]:
+                locations[row[0]] = loc
 
         return self.normalizescores(locations, smallIsBetter=1)
 
     def distancescore(self, rows):
         # If there's only one word, everyone wins!
-        if len(rows[0]) <= 2: return dict([(row[0], 1.0) for row in rows])
+        if len(rows[0]) <= 2:
+            return dict([(row[0], 1.0) for row in rows])
 
         # Initialize the dictionary with large values
         mindistance = dict([(row[0], 1000000) for row in rows])
 
         for row in rows:
             dist = sum([abs(row[i] - row[i - 1]) for i in range(2, len(row))])
-            if dist < mindistance[row[0]]: mindistance[row[0]] = dist
+            if dist < mindistance[row[0]]:
+                mindistance[row[0]] = dist
         return self.normalizescores(mindistance, smallIsBetter=1)
 
     def inboundlinkscore(self, rows):
@@ -342,17 +347,13 @@ class searcher:
                 if toid in linkscores:
                     pr = self.con.execute('select score from pagerank where urlid=%d' % fromid).fetchone()[0]
                     linkscores[toid] += pr
-        maxscore = max(linkscores.values())
-        normalizedscores = dict([(u, float(l) / maxscore) for (u, l) in linkscores.items()])
-        return normalizedscores
+        return self.normalizescores(linkscores)
 
     def pagerankscore(self, rows):
         pageranks = dict(
             [(row[0], self.con.execute('select score from pagerank where urlid=%d' % row[0]).fetchone()[0]) for row in
              rows])
-        maxrank = max(pageranks.values())
-        normalizedscores = dict([(u, float(l) / maxrank) for (u, l) in pageranks.items()])
-        return normalizedscores
+        return self.normalizescores(pageranks)
 
     def nnscore(self, rows, wordids):
         # Get unique URL IDs as an ordered list

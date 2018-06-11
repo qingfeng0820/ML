@@ -2,11 +2,13 @@
 from searchengine import crawler, searcher
 
 
-def test_crawler():
+def test_crawler(new=False):
     c = crawler("output/search.db")
-    c.createindextables()
-    pages = ['https://www.york.ac.uk/teaching/cws/wws/webpage1.html']
-    c.crawl(pages)
+    if new:
+        c.createindextables()
+        pages = ['https://www.york.ac.uk/teaching/cws/wws/webpage1.html']
+        c.crawl(pages)
+    c.calculatepagerank()
 
 
 def test_match_words():
@@ -20,4 +22,4 @@ def test_full_match_words():
 
 
 if __name__ == "__main__":
-    test_match_words()
+    test_crawler()
