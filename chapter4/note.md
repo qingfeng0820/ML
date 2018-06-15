@@ -4,6 +4,7 @@
     输入层 - 隐藏层 (n) - 输出层
     结点线性变换  output = w*x + b
     结点加激活函数做非线性变换或回归  Sigmoid, tanh, ReLu, Softmax
+    （S型神经元 Sigmoid tanh）
     
 ## 误差反向传播算法
 
@@ -12,7 +13,9 @@
 ### 代价函数（cost function）
 又叫损失函数（lost function），是神经网络优化的目标函数，神经网络训练或者优化的过程就是最小化损失函数的过程（损失函数值小了，对应预测的结果和真实结果的值就越接近
 
-    常用的代价函数： Quadratic Cost 二次代价, Cross-Entropy Cost 交叉熵代价
+    常用的代价函数： Quadratic Cost 二次代价, Cross-Entropy Cost 交叉熵代价， Log-likelihood Cost对数释然代价函数
+    如果输出神经元是线性的，用二次代价函数是没问题的；如果神经元是非线性S型的激活函数，则使用交叉熵代价函数；
+    如果输出神经元是用的Softmax做回归，则使用对数释然代价函数。
 
 ### 梯度下降 （求输入系数和偏值的下降梯度）
     delta w: -(learning rate * PartialDerivative(w -> Total Error))
