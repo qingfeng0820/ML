@@ -59,6 +59,11 @@ h为某隐藏结点, 二次代价函数， o为输出结点。
     对隐藏结点的该连接的输入偏置bh求偏导：PartialDerivative(bh -> Total Error) = PartialDerivative(Outh -> Total Error) * PartialDerivative(Neth -> Outh) * PartialDerivative(bh -> Neth)
     同理Total Error对bh的偏导 = (连接到该隐藏结点的某个结点的node delta) * 1 = 连接到该隐藏结点的某个结点的node delta
 
+### 迭代
+    迭代做依次feedforward和backpropagation， 直到Total Error小于给定值（即error收敛于给定值）。
+    如果迭代次数太多导致error收敛很慢，可以适当调大learning rate。
+    如果error不收敛于给定值（即error越来越大），说明learning rate太大，跳过了error的收敛点，这时候需要调低learning rate。
+
 ## 参考
 https://blog.csdn.net/zchang81/article/details/78119583
 
